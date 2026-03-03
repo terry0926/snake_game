@@ -18,7 +18,7 @@ public class Snake {
         body_length=3;
         snake_direction=Direction.RIGHT;
 
-        for(int i=0;i<body_length;i++){
+        for(int i=0;i<30;i++){
             body.add(new Point(startPosition.x - i, startPosition.y));
         }
     }

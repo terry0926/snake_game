@@ -2,6 +2,8 @@ package myproject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
 
@@ -14,12 +16,14 @@ class MyJFrame extends JFrame {
         Gampanel panel=new Gampanel();
         add(panel);
         setVisible(true);
+        panel.setFocusable(true);
+        panel.requestFocusInWindow();
     }
 }
 
-class Gampanel extends JPanel{
-    private int x=0;
-    private Snake snake=new Snake(new Point(9,9));
+class Gampanel extends JPanel implements KeyListener{
+    
+    public Snake snake=new Snake(new Point(9,9));
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -28,8 +32,6 @@ class Gampanel extends JPanel{
         g.fillRect(0, 0, getWidth(), getHeight());
         //WEIGHT 685 OUTBOUND(15) HEIGHT 653 OUTBOUND(47)
         this.draw_bound(714, 737, 15, g);
-        g.setColor(Color.RED);
-        g.fillRect(x, 0, 20, 20);
         this.draw_snake(7, 7,47 , 40,12, g);
         g.setColor(Color.RED);
         g.fillRect(7, 7, 40, 40);
@@ -40,7 +42,8 @@ class Gampanel extends JPanel{
     public Gampanel(){
         snake.snake_direction=Snake.Direction.UP;
         snake.head=snake.body.get(0);
-        Timer timer=new Timer(300, e->{
+        addKeyListener(this);
+        Timer timer=new Timer(150, e->{
             switch(snake.snake_direction){
                 case RIGHT:
                     snake.body.add(0,new Point(snake.head.x+1,snake.head.y));
@@ -59,7 +62,6 @@ class Gampanel extends JPanel{
                     snake.body.removeLast();
                     break;                
             }
-            x+=2;
             snake.head=snake.body.get(0);
             repaint();
         });
@@ -84,7 +86,32 @@ class Gampanel extends JPanel{
         g.fillRect(coordinary_x+this.snake.body.get(i).x*each_coordinary_gap, coordinary_y+this.snake.body.get(i).y*each_coordinary_gap,square_size,square_size);
         }
     }
-    
+    @Override
+    public void keyPressed(KeyEvent e){
+        switch(e.getKeyCode()){
+            case KeyEvent.VK_UP:
+                snake.snake_direction=Snake.Direction.UP;
+                System.out.print("2");
+                break;
+            case KeyEvent.VK_DOWN:
+                snake.snake_direction=Snake.Direction.DOWN;
+                System.out.print("2");
+                break;
+            case KeyEvent.VK_LEFT:
+                snake.snake_direction=Snake.Direction.LEFT;
+                break;
+            case KeyEvent.VK_RIGHT:
+                snake.snake_direction=Snake.Direction.RIGHT;
+                break;
+        }
+    }
+    @Override
+    public void keyReleased(KeyEvent e){
+        snake.snake_direction=snake.snake_direction;
+    }
+    @Override
+    public void keyTyped(KeyEvent e){
+    }
 } 
 
 public class Screen extends JPanel {
