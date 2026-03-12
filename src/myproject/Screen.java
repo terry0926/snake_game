@@ -24,6 +24,8 @@ class MyJFrame extends JFrame {
 class Gampanel extends JPanel implements KeyListener{
     
     public Snake snake=new Snake(new Point(9,9));
+    public Boundary boundary=new Boundary(13,snake.body);
+
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -63,6 +65,10 @@ class Gampanel extends JPanel implements KeyListener{
                     break;                
             }
             snake.head=snake.body.get(0);
+            boundary._change_boday_head(snake.head);
+            if(this.boundary.game_signal() == Boundary.signal.gameover){
+                System.exit(0);
+            }
             repaint();
         });
         timer.start();
